@@ -1,0 +1,90 @@
+#!/usr/bin/env ruby
+
+require File.expand_path("../../lib/sleep", __FILE__)
+require 'thor'
+
+class Bedtime < Thor
+
+  desc "now", "Sleep right now"
+  method_options :sleep_delay => :integer, :aliases => "-d"
+  def now
+    spaces do
+      puts "Wake up at one of the following times (Set your alarm clock):"
+      puts
+      update_sleep_delay!
+      sleep.now.each do |time|
+        puts time
+      end
+    end
+  end
+
+  desc "wakeup_at TIME", "Wake up at certain time"
+  method_options :sleep_delay => :integer, :aliases => "-d"
+  def wakeup_at(*time)
+    spaces do
+      puts "Sleep at one of the following times:"
+      puts
+      update_sleep_delay!
+      sleep.wakeup_at(time.join(" ")).each do |time|
+        puts time
+      end
+    end
+  end
+
+  desc "sleep_at TIME", "Sleep at certain time"
+  method_options :sleep_delay => :integer, :aliases => "-d"
+  def sleep_at(*time)
+    spaces do
+      puts "Wake up  at one of the following times: (Set your alarm clock):"
+      puts
+      update_sleep_delay!
+      sleep.sleep_at(time.join(" ")).each do |time|
+        puts time
+      end
+    end
+  end
+
+  desc "next TIME", "next cycle for a wakeup time"
+  method_options :sleep_delay => :integer, :aliases => "-d"
+  def next(*time)
+    spaces do
+      puts "Your next wake up time:"
+      puts
+      update_sleep_delay!
+      puts sleep.next(time.join(" "))
+    end
+  end
+
+  desc "prev TIME", "previous cycle for a wakeup time"
+  method_options :sleep_delay => :integer, :aliases => "-d"
+  def prev(*time)
+    spaces do
+      puts "Your previous wake up time:"
+      puts
+      update_sleep_delay!
+      puts sleep.prev(time.join(" "))
+    end
+  end
+
+  private
+
+  def update_sleep_delay!
+    if options[:sleep_delay]
+      sleep.sleep_delay = options[:sleep_delay].to_i
+      sleep.delay = true
+    end
+  end
+
+  def sleep
+    @sleep ||= Sleep.new
+  end
+
+  def spaces
+    puts
+    yield
+    puts
+  end
+
+end
+
+Bedtime.start
