@@ -11,6 +11,6 @@ Gem::Specification.new do |gem|
   gem.homepage        = "https://github.com/bry4n/sleep"
   gem.executables     = ["bedtime"]
   gem.files           = Dir['README.md', 'LICENSE', 'lib/**/*.rb', 'bin/*']
-  gem.add_dependency  "chronic"
+  gem.add_dependency  "minute"
   gem.add_dependency  "thor"
 end
